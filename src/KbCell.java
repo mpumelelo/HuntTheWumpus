@@ -77,7 +77,7 @@ public class KbCell {
 	}
 
 	// if stench, breeze or no pit and no wumpus returns true, else returns false 
-	public boolean safe(BoardCoordinate cell){
+	public boolean isSafe(){
 		boolean pit = this.pit==wpState.YES;
 		boolean wumpus = this.wumpus==wpState.YES;
 		boolean stench = this.stench==pState.YES;

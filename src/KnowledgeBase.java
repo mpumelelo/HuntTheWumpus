@@ -56,7 +56,19 @@ public class KnowledgeBase {
 		}
 		
 	}
-	
+
+	// returns a list of safe moves 
+	public List<BoardCoordinate> askSafeMoves(){
+		List<BoardCoordinate> safeMoves = new ArrayList<BoardCoordinate>();
+		for(int i = 0; i < numRows; i++){
+			for(int j = 0; j < numColumns; j++){
+				if (kbTiles[i][j].isSafe())
+					safeMoves.add(kbTiles[i][j].getLocation());
+			}	
+		}
+		return safeMoves;
+	}
+
 	// if all neighbors of stench except one is not the wumpus then we can infer the last unknown cell is the wumpus
 	private void tryInferWumpusLocation(Board gBoard){
 		for (BoardCoordinate stenchTile : this.stenchTiles){
@@ -87,7 +99,7 @@ public class KnowledgeBase {
 		}
 	}
 
-	// set all coordinates received to no wumpus 
+	// set all coordinates passed in parameter list set to no wumpus 
 	private void setNeighborsNoWumpus(List<BoardCoordinate> neighbors){
 		for(BoardCoordinate neighbor : neighbors)
 			kbTiles[neighbor.getX()][neighbor.getY()].setWumpus(wpState.NO); //impossible for neighbors to have wumpus if current cell has no stench
@@ -107,7 +119,7 @@ public class KnowledgeBase {
 		}	
 	}
 	
-	// set all coordinates received to possible wumpus if current status is unknown
+	// set all coordinates received to possible wumpus if coordinate current status is unknown
 	private void setNeighborsPossWump(List<BoardCoordinate> neighbors){
 		for(BoardCoordinate neighbor : neighbors){
 			if(kbTiles[neighbor.getX()][neighbor.getY()].getWumpus()==wpState.UNKNOWN) // only set to maybe if current state is unknown
