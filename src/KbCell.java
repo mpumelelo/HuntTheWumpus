@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * This class stores the belief state for a cell.
  */
@@ -10,6 +12,7 @@ public class KbCell {
 	public boolean visited; // true if cell visited, else false 
 	private BoardCoordinate location; // object with x and y coordinates of cell
 	private int distFrom; // value indicating distance from starting cell
+	public List<BoardCoordinate> neighbors; //list of cells that are one move away
 	
 	//constructor 
 	public KbCell(BoardCoordinate location) {
@@ -88,11 +91,11 @@ public class KbCell {
 		
 	}; 
 	
-	public int getDistFromStart() {
+	public int getDistFrom() {
 		return this.distFrom;
 	}
 
-	public void setDistFromStart(int distFromStart) {
+	public void setDistFrom(int distFromStart) {
 		this.distFrom = distFromStart;
 	}
 	

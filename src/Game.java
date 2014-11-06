@@ -15,10 +15,12 @@ public class Game {
 	private final String GOLD = "G";
 	private final String PIT = "P";
 	private final String ENTER = "E";
+	boolean agentAlive=true;
 	
 	//constructor 
 	public Game() {
 		initGame();
+		agentAlive=true;
 	}
 
 	// parse input file and initialize board and cells objects 
@@ -53,6 +55,12 @@ public class Game {
 	}
 
 	public void playGame(){
+		
+		while(agentAlive){
+			Action 
+			gameAgent.decide();
+			switch()
+		}
 		//todo
 		//while agent not dead
 			//agent.makemove

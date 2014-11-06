@@ -21,13 +21,18 @@ public class KnowledgeBase {
 		this.kbTiles= new KbCell[numRows][numColumns];
 		this.stenchTiles= new ArrayList<BoardCoordinate>();
 		
-		// initialize each tile with a kbTile object
+		// initialize each tile with a kbTile object 
 		for(int i = 0; i < this.numRows; i++){
 			for(int j = 0; j < this.numColumns; j++){
 				this.kbTiles[i][j]= new KbCell(new BoardCoordinate(i,j));
+				this.setCellNeighbors(i,j);
 			}
 		}
 		this.setCellDistFrm(start);
+	}
+	
+	public BoardCoordinate getStartTile() {
+		return startTile;
 	}
 
 	// update knowledge base with breeze, stench and glitter info learned from current cell 
@@ -75,15 +80,15 @@ public class KnowledgeBase {
 	}
 	
 	// returns a list of unsafe unvisited tiles  
-	public List<BoardCoordinate> getAllUnsafeUnvisited(){
-		List<BoardCoordinate> unSafeTiles = new ArrayList<BoardCoordinate>();
+	public List<BoardCoordinate> getAllPossWump(){
+		List<BoardCoordinate> possWumpTiles = new ArrayList<BoardCoordinate>();
 		for(int i = 0; i < numRows; i++){
 			for(int j = 0; j < numColumns; j++){
-				if ( !(kbTiles[i][j].isSafe()) && !(kbTiles[i][j].isVisited()) ) // if tile unsafe and unvisited 
-					unSafeTiles.add(kbTiles[i][j].getLocation());
+				if ( !(kbTiles[i][j].getWumpus()==wpState.NO) && !(kbTiles[i][j].isVisited()) ) // if tile could be wumpus and unvisited 
+					possWumpTiles.add(kbTiles[i][j].getLocation());
 			}	
 		}
-		return unSafeTiles;
+		return possWumpTiles;
 	}
 
 	// if all neighbors of stench except one is not the wumpus then we can infer the last unknown cell is the wumpus
@@ -159,8 +164,27 @@ public class KnowledgeBase {
 				int sX= tile.getX();
 				int sY= tile.getY();
 				int distance= Math.abs(i-sX) + Math.abs(j-sY); // calculate Manhattan distance from start point to current cell
-				this.kbTiles[i][j].setDistFromStart(distance);
+				this.kbTiles[i][j].setDistFrom(distance);
 			}
+		}
+	}
+	
+	private void setCellNeighbors(int cellRow, int cellCol){
+		int rowAbove = cellRow-1;
+		int rowBelow = cellRow+1;
+		int colLeft= cellCol-1;
+		int colRight= cellCol+1;
+		if (0<=rowAbove && rowAbove<this.numRows){//if there is a cell above add to neighbors list
+			this.kbTiles[cellRow][cellCol].neighbors.add(new BoardCoordinate(rowAbove,cellCol));	
+		}
+		if (0<=rowBelow && rowBelow<this.numRows){//if there is a cell below add to neighbors list
+			this.kbTiles[cellRow][cellCol].neighbors.add(new BoardCoordinate(rowBelow,cellCol));	
+		}
+		if (0<=colLeft && colLeft<this.numColumns){//if there is a cell to the left add to neighbors list
+			this.kbTiles[cellRow][cellCol].neighbors.add(new BoardCoordinate(cellRow,colLeft));	
+		}
+		if (0<=colRight && colRight<this.numColumns){//if there is a cell to the right add to neighbors list
+			this.kbTiles[cellRow][cellCol].neighbors.add(new BoardCoordinate(cellRow,colRight));	
 		}
 	}
 	
