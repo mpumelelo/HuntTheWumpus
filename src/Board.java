@@ -6,8 +6,7 @@ public class Board {
 
 	private int numRows;      // number of board rows
 	private int numColumns;   // number of board cells
-	public Cell[][] tiles;  // two-dimensional array of cell/tile objects 
-	private BoardCoordinate startTile; // board coordinates of agent starting position 
+	public Cell[][] tiles;  // two-dimensional array of cell/tile objects  
 		
 	public Board(int numRows, int numColumns) {
 		this.numRows = numRows;
@@ -21,14 +20,6 @@ public class Board {
 				this.setCellNeighbors(i,j);
 			}
 		}
-	}
-	
-	public BoardCoordinate getStartTile() {
-		return startTile;
-	}
-
-	public void setStartTile(BoardCoordinate startTile) {
-		this.startTile = startTile;
 	}
 
 	public int getNumRows() {
@@ -55,17 +46,6 @@ public class Board {
 		}
 		if (0<=colRight && colRight<this.numColumns){//if there is a cell to the right add to neighbors list
 			this.tiles[cellRow][cellCol].neighbors.add(new BoardCoordinate(cellRow,colRight));	
-		}
-	}
-	
-	public void setAllCellDistFrmStarts(){
-		for(int i = 0; i < this.numRows; i++){
-			for(int j = 0; j < this.numColumns; j++){
-				int sX= this.startTile.getX();
-				int sY= this.startTile.getY();
-				int distance= Math.abs(i-sX) + Math.abs(j-sY); // calculate Manhattan distance from start point to current cell
-				this.tiles[i][j].setDistFromStart(distance);
-			}
 		}
 	}
 	

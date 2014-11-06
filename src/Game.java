@@ -7,22 +7,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Game {
-	public boolean wumpusAlive; // indicates if wumpus is alive or dead
 	public Board gameBoard; // Board object used to store game info
-	public KnowledgeBase gameKB; // Knowledge base for agent
-	public boolean gameOver;
+	public Agent gameAgent;
 	private final String WUMPUS = "W"; // string constants used to match input file characters 
 	private final String BREEZY = "B";
 	private final String STENCH = "S";
 	private final String GOLD = "G";
 	private final String PIT = "P";
 	private final String ENTER = "E";
-	private enum pState { YES, NO, UNKNOWN} // belief states for percept 
 	
 	//constructor 
 	public Game() {
-		gameOver=false;
-		wumpusAlive=true;
 		initGame();
 	}
 
@@ -36,15 +31,13 @@ public class Game {
 		    int counter = 0;
 		    while ((inputText = reader.readLine()) != null) {
 		        if(counter == 0){
-		        	initBoardAndKB(inputText); // read board size from input file then call board and KB constructors 
+		        	initBoard(inputText); // read board size from input file then call board constructor 
 		        	counter++;
 		        } else {
 		        	initCell(inputText); // read cell info from input file and initialize corresponding cell 
 		        	counter++;
 		        }
 		    }
-		    this.gameBoard.setAllCellDistFrmStarts(); // set distance from start value for all cells. Outside of while loop above to make sure startTile is set.
-		    
 		} catch (FileNotFoundException e) { 
 		    e.printStackTrace();
 		} catch (IOException e) {
@@ -59,8 +52,15 @@ public class Game {
 		}
 	}
 
+	public void playGame(){
+		//todo
+		//while agent not dead
+			//agent.makemove
+			//if agent alive print move, if agent dead print how it died and score, if agent exits print score
+	}
+	
 	// read board size from input file and call board constructor 
-	private void initBoardAndKB(String text){
+	private void initBoard(String text){
 		int rows;
 		int columns;
 	    String pattern = "[S|s]ize\\s*=\\s*(\\d+)\\s*,\\s*(\\d+)";
@@ -72,13 +72,12 @@ public class Game {
 	    	rows = Integer.parseInt(m.group(1));
 	    	columns = Integer.parseInt(m.group(2));  
 	    	this.gameBoard= new Board(rows,columns); //initialize gameBoard 
-	    	this.gameKB = new KnowledgeBase(rows,columns); //initialize gameKB
 	    } else {
 	        System.out.println("Error: Unable to read board size from file.");
 	    }	    
 	}
 
-	// read cell info from input file and initialize corresponding cell 
+	// read cell info from input file and initialize board cells and agent  
 	private void initCell(String text){
 	      String splitBy = ",";
 	      String[] cellStuff = text.split(splitBy);
@@ -105,7 +104,7 @@ public class Game {
 	    			  continue;
 	    		  } else if (cellStuff[i].equalsIgnoreCase(ENTER)){
 	    			  gameBoard.tiles[rowNumber][columnNumber].setEnter(true);
-	    			  gameBoard.setStartTile(new BoardCoordinate(rowNumber, columnNumber));
+	    			  gameAgent = new Agent(gameBoard, new BoardCoordinate(rowNumber, columnNumber), gameBoard.getNumRows(), gameBoard.getNumColumns());
 	    			  continue;	  
 	    		  } else if (cellStuff[i].equalsIgnoreCase(GOLD)){
 	    			  gameBoard.tiles[rowNumber][columnNumber].setGlitter(true);

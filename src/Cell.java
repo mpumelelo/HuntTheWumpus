@@ -12,7 +12,6 @@ class Cell {
 	private boolean pit;	   // pit value from input file 
 	private boolean wumpus;    // Wumpus value from input file 
 	private boolean glitter;   // glitter value from input file 
-	private int distFromStart; // value indicating distance from starting cell
 	private BoardCoordinate location; // object with x and y coordinates of cell
 	public List<BoardCoordinate> neighbors; //list of cells that are one move away
 	
@@ -25,7 +24,6 @@ class Cell {
 		this.wumpus = false;
 		this.glitter = false;
 		this.location = location;
-		this.distFromStart = -1; // this value will be set by a Board class method
 		this.neighbors= new ArrayList<BoardCoordinate>();
 	}
 
@@ -76,14 +74,6 @@ class Cell {
 
 	public void setGlitter(boolean inGlitter) {
 		this.glitter = inGlitter;
-	}
-
-	public int getDistFromStart() {
-		return distFromStart;
-	}
-
-	public void setDistFromStart(int distFromStart) {
-		this.distFromStart = distFromStart;
 	}
 
 	public BoardCoordinate getLocation() {

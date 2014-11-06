@@ -5,24 +5,29 @@ import java.util.ArrayList;
  * This class acts as the agent knowledge base
  */
 public class KnowledgeBase {
+	public boolean wumpusAlive; // indicates if wumpus is alive 
 	private int numRows;      // number of board rows
 	private int numColumns;   // number of board cells
+	private BoardCoordinate startTile; //cell where agent enters board
 	private List<BoardCoordinate> stenchTiles; //list of all cells that we learn have stench
 	public KbCell[][] kbTiles;  // two-dimensional array of cell/tile objects 
 	
 	// constructor 
-	public KnowledgeBase(int numRows, int numColumns) {
+	public KnowledgeBase(BoardCoordinate start, int numRows, int numColumns) {
+		this.wumpusAlive=true;
+		this.startTile= start;
 		this.numRows = numRows;
 		this.numColumns = numColumns;
 		this.kbTiles= new KbCell[numRows][numColumns];
 		this.stenchTiles= new ArrayList<BoardCoordinate>();
 		
-		// initialize each tile with a Cell object
+		// initialize each tile with a kbTile object
 		for(int i = 0; i < this.numRows; i++){
 			for(int j = 0; j < this.numColumns; j++){
 				this.kbTiles[i][j]= new KbCell(new BoardCoordinate(i,j));
 			}
 		}
+		this.setCellDistFrm(start);
 	}
 
 	// update knowledge base with breeze, stench and glitter info learned from current cell 
@@ -57,16 +62,28 @@ public class KnowledgeBase {
 		
 	}
 
-	// returns a list of safe moves 
-	public List<BoardCoordinate> askSafeMoves(){
+	// returns a list of safe unvisited tiles  
+	public List<BoardCoordinate> getAllSafeUnvisited(){
 		List<BoardCoordinate> safeMoves = new ArrayList<BoardCoordinate>();
 		for(int i = 0; i < numRows; i++){
 			for(int j = 0; j < numColumns; j++){
-				if (kbTiles[i][j].isSafe())
+				if ( kbTiles[i][j].isSafe() && !(kbTiles[i][j].isVisited()) ) // if tile safe and unvisited 
 					safeMoves.add(kbTiles[i][j].getLocation());
 			}	
 		}
 		return safeMoves;
+	}
+	
+	// returns a list of unsafe unvisited tiles  
+	public List<BoardCoordinate> getAllUnsafeUnvisited(){
+		List<BoardCoordinate> unSafeTiles = new ArrayList<BoardCoordinate>();
+		for(int i = 0; i < numRows; i++){
+			for(int j = 0; j < numColumns; j++){
+				if ( !(kbTiles[i][j].isSafe()) && !(kbTiles[i][j].isVisited()) ) // if tile unsafe and unvisited 
+					unSafeTiles.add(kbTiles[i][j].getLocation());
+			}	
+		}
+		return unSafeTiles;
 	}
 
 	// if all neighbors of stench except one is not the wumpus then we can infer the last unknown cell is the wumpus
@@ -98,6 +115,15 @@ public class KnowledgeBase {
 			}
 		}
 	}
+	
+	// set all cells no wumpus
+	public void setWumpusKilled() {
+		for(int i = 0; i < this.numRows; i++){
+			for(int j = 0; j < this.numColumns; j++){
+					kbTiles[i][j].setWumpus(wpState.NO);
+			}
+		}
+	}
 
 	// set all coordinates passed in parameter list set to no wumpus 
 	private void setNeighborsNoWumpus(List<BoardCoordinate> neighbors){
@@ -125,6 +151,17 @@ public class KnowledgeBase {
 			if(kbTiles[neighbor.getX()][neighbor.getY()].getWumpus()==wpState.UNKNOWN) // only set to maybe if current state is unknown
 				kbTiles[neighbor.getX()][neighbor.getY()].setWumpus(wpState.MAYBE);
 		}	
+	}
+	
+	public void setCellDistFrm(BoardCoordinate tile){
+		for(int i = 0; i < this.numRows; i++){
+			for(int j = 0; j < this.numColumns; j++){
+				int sX= tile.getX();
+				int sY= tile.getY();
+				int distance= Math.abs(i-sX) + Math.abs(j-sY); // calculate Manhattan distance from start point to current cell
+				this.kbTiles[i][j].setDistFromStart(distance);
+			}
+		}
 	}
 	
 	//print kB cells

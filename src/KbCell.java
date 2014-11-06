@@ -9,6 +9,7 @@ public class KbCell {
 	private pState glitter;   // true if glitter percept received, else false 
 	public boolean visited; // true if cell visited, else false 
 	private BoardCoordinate location; // object with x and y coordinates of cell
+	private int distFrom; // value indicating distance from starting cell
 	
 	//constructor 
 	public KbCell(BoardCoordinate location) {
@@ -18,6 +19,7 @@ public class KbCell {
 		this.pit = wpState.UNKNOWN;
 		this.wumpus = wpState.UNKNOWN;
 		this.glitter = pState.UNKNOWN;
+		this.distFrom = -100;
 	}
 
 	public pState getStench() {
@@ -85,6 +87,14 @@ public class KbCell {
 		return stench || breeze || (!pit && !wumpus);
 		
 	}; 
+	
+	public int getDistFromStart() {
+		return this.distFrom;
+	}
+
+	public void setDistFromStart(int distFromStart) {
+		this.distFrom = distFromStart;
+	}
 	
 	public void print() {
 		String values = " ";
