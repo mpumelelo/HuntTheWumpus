@@ -5,8 +5,7 @@ public class HuntTheWumpus {
 		
 		Game newGame= new Game();
 		newGame.gameBoard.print();
-		newGame.gameAgent.kb.print();
-
+		newGame.playGame();
 	}
 
 }

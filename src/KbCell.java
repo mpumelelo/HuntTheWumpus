@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ public class KbCell {
 		this.wumpus = wpState.UNKNOWN;
 		this.glitter = pState.UNKNOWN;
 		this.distFrom = -100;
+		this.neighbors= new ArrayList<BoardCoordinate>();
+		this.location=location;
 	}
 
 	public pState getStench() {

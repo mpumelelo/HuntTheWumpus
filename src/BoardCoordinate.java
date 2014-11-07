@@ -23,6 +23,10 @@ public class BoardCoordinate {
 		this.yCoordinate = yCoordinate;
 	}
 	
+	public void print(){
+		System.out.println("("+this.xCoordinate+","+this.yCoordinate+")");	
+	}
+	
 	@Override // define comparison of BoardCoordinate objects 
 	public boolean equals (Object other){
 		if (!(other instanceof BoardCoordinate)){

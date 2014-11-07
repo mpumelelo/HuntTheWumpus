@@ -24,7 +24,7 @@ public class Game {
 	}
 
 	// parse input file and initialize board and cells objects 
-	public void initGame (){	
+	private void initGame (){	
 		File inputFile = new File("C:/wumpus.txt"); // location and file name of input file used
 		BufferedReader reader = null;
 		try {
@@ -54,18 +54,35 @@ public class Game {
 		}
 	}
 
-	public void playGame(){
-		
+	public void playGame(){	
 		while(agentAlive){
-			Action 
-			gameAgent.decide();
-			switch()
+			Action agentDecision= gameAgent.decide();
+			
+			switch(agentDecision){
+				case FORWARD: gameAgent.turn(gameAgent.plan.remove());
+							  gameAgent.moveForward();
+							  break;
+				case SHOOT:   gameAgent.shootArrow();
+							  break;
+				case GRAB:	  gameAgent.grabGold();
+							  break;
+				case CLIMB:   gameAgent.climbOut();
+							  break;	
+			}
+			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isPit()){
+				agentAlive=false;
+				System.out.println("Agent fell into pit at location ("+gameAgent.getPosition().getX()+gameAgent.getPosition().getY()+").");
+			}
+			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isWumpus()){
+				agentAlive=false;
+				System.out.println("Agent eaten by wumpus at location ("+gameAgent.getPosition().getX()+","+gameAgent.getPosition().getY()+").");
+			}
 		}
-		//todo
+	}
 		//while agent not dead
 			//agent.makemove
 			//if agent alive print move, if agent dead print how it died and score, if agent exits print score
-	}
+
 	
 	// read board size from input file and call board constructor 
 	private void initBoard(String text){
