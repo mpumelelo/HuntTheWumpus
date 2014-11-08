@@ -66,7 +66,7 @@ public class Board {
 	private void printHline(){
 		String line="";
 		for(int count=0; count<numColumns; count++){
-			line+="-------";
+			line+="---------";
 		}
 		System.out.println(line);
 	}

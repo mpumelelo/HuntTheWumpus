@@ -86,11 +86,11 @@ public class KbCell {
 
 	// if stench, breeze or no pit and no wumpus returns true, else returns false 
 	public boolean isSafe(){
-		boolean pit = this.pit==wpState.YES;
-		boolean wumpus = this.wumpus==wpState.YES;
+		boolean pit = !(this.pit==wpState.NO);
+		boolean wumpus = !(this.wumpus==wpState.NO);
 		boolean stench = this.stench==pState.YES;
 		boolean breeze= this.breeze==pState.YES;
-		return stench || breeze || (!pit && !wumpus);
+		return (stench || breeze || (!pit && !wumpus)|| this.isVisited());
 		
 	}; 
 	
@@ -104,6 +104,9 @@ public class KbCell {
 	
 	public void print() {
 		String values = " ";
+		if(this.isVisited()){
+			values +="V";
+		}
 		if(this.breeze==pState.YES){
 			values += "B";
 		}
@@ -116,6 +119,9 @@ public class KbCell {
 		if(this.pit==wpState.MAYBE){
 			values += "P?";
 		}
+		if(this.pit==wpState.NO){
+			values += "NP ";
+		}
 		if(this.glitter==pState.YES){
 			values += "G";
 		}
@@ -125,10 +131,13 @@ public class KbCell {
 		if(this.wumpus==wpState.MAYBE){
 			values += "W?";
 		}
+		if(this.wumpus==wpState.NO){
+			values += "NW ";
+		}
 		if(values.equalsIgnoreCase("")){
 			values = "  ";
 		}
-		System.out.printf("%-6s",values);
+		System.out.printf("%-8s",values);
 	}
 
 }

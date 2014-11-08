@@ -39,6 +39,8 @@ public class KnowledgeBase {
 	public void tell(Board gBoard, BoardCoordinate currentCell){
 		
 		this.kbTiles[currentCell.getX()][currentCell.getY()].setVisited(true); // set current cell as visited 
+		this.kbTiles[currentCell.getX()][currentCell.getY()].setWumpus(wpState.NO);
+		this.kbTiles[currentCell.getX()][currentCell.getY()].setPit(wpState.NO);
 		
 		if (gBoard.tiles[currentCell.getX()][currentCell.getY()].isStench()){ // if cell is stench in the real world 
 			this.kbTiles[currentCell.getX()][currentCell.getY()].setStench(pState.YES); // set stench YES in KB
@@ -69,11 +71,14 @@ public class KnowledgeBase {
 
 	// returns a list of safe unvisited tiles  
 	public List<BoardCoordinate> getAllSafeUnvisited(){
+		//System.out.println("kb.getallsafeunvisited:The following are safe unvisited tiles:"); //DEBUG
 		List<BoardCoordinate> safeMoves = new ArrayList<BoardCoordinate>();
 		for(int i = 0; i < numRows; i++){
 			for(int j = 0; j < numColumns; j++){
-				if ( kbTiles[i][j].isSafe() && !(kbTiles[i][j].isVisited()) ) // if tile safe and unvisited 
+				if ( kbTiles[i][j].isSafe() && !(kbTiles[i][j].isVisited()) ){ // if tile safe and unvisited 
 					safeMoves.add(kbTiles[i][j].getLocation());
+					//kbTiles[i][j].getLocation().print();//DEBUG
+				}
 			}	
 		}
 		return safeMoves;
@@ -207,7 +212,7 @@ public class KnowledgeBase {
 	private void printHline(){
 		String line="";
 		for(int count=0; count<numColumns; count++){
-			line+="-------";
+			line+="---------";
 		}
 		System.out.println(line);
 	}

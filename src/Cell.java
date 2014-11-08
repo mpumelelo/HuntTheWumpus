@@ -107,6 +107,6 @@ class Cell {
 		if(values.equalsIgnoreCase("")){
 			values = "  ";
 		}
-		System.out.printf("%-6s",values);
+		System.out.printf("%-8s",values);
 	}
 }

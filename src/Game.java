@@ -15,12 +15,12 @@ public class Game {
 	private final String GOLD = "G";
 	private final String PIT = "P";
 	private final String ENTER = "E";
-	boolean agentAlive=true;
+	boolean gameOver=false;
 	
 	//constructor 
 	public Game() {
 		initGame();
-		agentAlive=true;
+		gameOver=false;
 	}
 
 	// parse input file and initialize board and cells objects 
@@ -55,33 +55,33 @@ public class Game {
 	}
 
 	public void playGame(){	
-		while(agentAlive){
+		while(!gameOver){
 			Action agentDecision= gameAgent.decide();
-			
 			switch(agentDecision){
 				case FORWARD: gameAgent.turn(gameAgent.plan.remove());
 							  gameAgent.moveForward();
 							  break;
-				case SHOOT:   gameAgent.shootArrow();
+				case SHOOT:   if(!(gameAgent.plan.isEmpty()))
+							  	gameAgent.turn(gameAgent.plan.remove());
+							  gameAgent.shootArrow();
 							  break;
 				case GRAB:	  gameAgent.grabGold();
 							  break;
 				case CLIMB:   gameAgent.climbOut();
+							  gameOver=true;
 							  break;	
 			}
 			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isPit()){
-				agentAlive=false;
+				gameOver=true;
 				System.out.println("Agent fell into pit at location ("+gameAgent.getPosition().getX()+gameAgent.getPosition().getY()+").");
 			}
 			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isWumpus()){
-				agentAlive=false;
+				gameOver=true;
 				System.out.println("Agent eaten by wumpus at location ("+gameAgent.getPosition().getX()+","+gameAgent.getPosition().getY()+").");
 			}
 		}
 	}
-		//while agent not dead
-			//agent.makemove
-			//if agent alive print move, if agent dead print how it died and score, if agent exits print score
+//to do score game
 
 	
 	// read board size from input file and call board constructor 
