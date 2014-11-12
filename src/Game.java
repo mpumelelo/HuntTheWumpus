@@ -15,17 +15,19 @@ public class Game {
 	private final String GOLD = "G";
 	private final String PIT = "P";
 	private final String ENTER = "E";
+	private String filePath;
 	boolean gameOver=false;
 	
 	//constructor 
-	public Game() {
+	public Game(String filePath) {
+		this.filePath = filePath;
 		initGame();
 		gameOver=false;
 	}
 
 	// parse input file and initialize board and cells objects 
 	private void initGame (){	
-		File inputFile = new File("C:/wumpus.txt"); // location and file name of input file used
+		File inputFile = new File(this.filePath); // location and file name of input file used
 		BufferedReader reader = null;
 		try {
 		    reader = new BufferedReader(new FileReader(inputFile));
