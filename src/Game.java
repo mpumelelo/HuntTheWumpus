@@ -16,6 +16,7 @@ public class Game {
 	private final String PIT = "P";
 	private final String ENTER = "E";
 	private String filePath;
+	private int score = 0;
 	boolean gameOver=false;
 	
 	//constructor 
@@ -62,12 +63,15 @@ public class Game {
 			switch(agentDecision){
 				case FORWARD: gameAgent.turn(gameAgent.plan.remove());
 							  gameAgent.moveForward();
+							  this.score--;
 							  break;
 				case SHOOT:   if(!(gameAgent.plan.isEmpty()))
 							  	gameAgent.turn(gameAgent.plan.remove());
 							  gameAgent.shootArrow();
+							  this.score -= 10;
 							  break;
 				case GRAB:	  gameAgent.grabGold();
+							  this.score += 1000;
 							  break;
 				case CLIMB:   gameAgent.climbOut();
 							  gameOver=true;
@@ -75,15 +79,17 @@ public class Game {
 			}
 			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isPit()){
 				gameOver=true;
+				this.score -= 1000;
 				System.out.println("Agent fell into pit at location ("+gameAgent.getPosition().getX()+gameAgent.getPosition().getY()+").");
 			}
 			if(gameBoard.tiles[gameAgent.getPosition().getX()][gameAgent.getPosition().getY()].isWumpus()){
 				gameOver=true;
+				this.score -= 1000;				
 				System.out.println("Agent eaten by wumpus at location ("+gameAgent.getPosition().getX()+","+gameAgent.getPosition().getY()+").");
 			}
 		}
+		System.out.println("Game Over Man, GAME OVER! Final Score: " + this.score);
 	}
-//to do score game
 
 	
 	// read board size from input file and call board constructor 
